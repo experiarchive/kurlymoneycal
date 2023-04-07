@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>주휴수당 계산기</title>
+    <style>
+        @media (max-width: 600px) {
+        h1 {
+          font-size: 24px;
+        }
+        body {
+            font-size: 20px !important;
+        }
+      }
+
+      @media (min-width: 600px) {
+        h1 {
+          font-size: 36px;
+        }
+        body {
+            font-size: 30px !important;
+        }
+      }
+        body {
+          font-family: Arial, sans-serif;
+          font-size : 22.5px;
+          margin: 0;
+          padding: 0;
+        }
+        h1 {
+          text-align: center;
+          background-color: purple; 
+          color: white;
+          margin-bottom: 80px;
+          padding: 20px;
+        }
+        div {
+          margin: 20px;
+        }
+        input[type=text] {
+          width: 20%;
+          padding: 12px 20px;
+          margin: 8px 0;
+          box-sizing: border-box;
+          border: 0;
+          border-bottom: 2px solid black
+        }
+        button {
+          width: 100px;
+          background-color: purple;
+          color: white;
+          padding: 14px 20px;
+          margin: 8px 0;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        button:hover {
+          background-color: blueviolet;
+        }
+        #workhour{
+          width: 230px;
+          padding: 10px;
+          background-color:green;
+        }
+        #text {
+            border: 2px solid black;
+            padding: 20px;
+            font-size: 15px;
+            color: black;
+            font-weight: bold;
+            width: 80%;
+            margin: 0 auto;
+        }
+        #example {
+            font-size: 13px;    
+            color: purple;
+        }
+        #worktype {
+            font-size: 13px;
+            color: purple;
+        }
+        #explain {
+          margin-top: 50px;
+        }
+      </style>
+      <h1 style="text-align:center;">마켓컬리 주휴수당 계산기</h1>   
+  </head>
+  
+  <body>
+    <div style="text-align:center;"> 
+        1주일간 일한 시간의 합을 입력하세요
+        <p>
+            (휴게시간 제외)
+        </p>
+        <p><input id="userInput" type="text"><button onclick="calculate()">계산하기</button></p>
+    </div>
+    <div id="worktype", style="text-align:center;">
+      <button id="workhour", onclick="showText()">근무타입별 근무시간 환산(클릭)</button>
+      <p id="text1"></p>
+    </div>
+
+    <div style="text-align:center;">
+        한 달에 몇 주간 일했는지 입력하세요
+        <p>
+            (아래 3번 항목 참고)
+        </p>
+        <P><input id="userInputTotal" type="text"><button onclick="calculateTotal()">계산하기</button></P>
+    </div>
+
+    <p style="text-align:center;">
+        ★ 1주 주휴수당 : <span id="result"></span>원
+    </p>
+    <P style="text-align:center;">
+        ★ 한달 주휴수당 : <span id="resultTotal"></span>원
+    </P>
+    <div id="text">
+        <p>
+            1. 마켓컬리 주휴수당 지급기준 : 월~일요일 기준 5일 이상 근무 
+            <span id="example">예시) 월, 화, 목, 토, 일 근무시 주휴수당 발생</span>
+        </p>
+        <p>
+            2. 주휴수당 지급일 : 익월 5일 (4대보험 공제 후 지급)
+        </p>
+        <p>
+            3. 말 일이 일요일로 끝나지 않을 경우는 마지막 주에 해당하는 주휴수당은 다음 달로 이월
+        </p>
+        <p>
+            4. 2023년 최저시급 9,620원 / 주휴수당은 기준시급으로만 계산합니다. (연장, 심야수당 무관)
+        </p>
+        <p>
+            5. 주휴수당은 소정근로시간을 기준으로 하며, 소정근로시간은 법정근로시간을 초과할 수 없으므로
+               주 40시간 이상 근무해도 주휴수당은 최대 8시간분입니다.
+        </p>
+        <p id="explain">
+          ※ 근무시간을 시간(Hour)단위로 환산하면 소수점이 나오므로 컬리에서 실지급하는 것과 아주 약간의 오차는 발생할 수 있습니다.
+          예를 들면, 풀타임의 일 근무시간은 분(min)단위로 휴게시간 제외, 460분입니다. 1시간으로 나누면 7.67시간이 나옵니다.
+      </p>
+    </div>
+        
+    <script>
+      function calculate() {
+        var input = document.getElementById("userInput").value;
+        if (input > 40) {
+            input = 40;
+        }
+        var result = (input / 40) * 8 * 9620;
+        result = Math.round(result);
+        document.getElementById("result").innerHTML = result.toLocaleString();
+        return result;
+      }
+      function calculateTotal() {
+        var inputTotal = document.getElementById("userInputTotal").value;
+        var result = calculate()
+        var resultTotal = inputTotal * result;
+        resultTotal = Math.round(resultTotal);
+        document.getElementById("resultTotal").innerHTML = resultTotal.toLocaleString();
+      }
+      function showText() {
+        var textElement = document.getElementById("text1");
+        if (textElement.innerHTML) {
+          textElement.innerHTML = "";
+        }
+        else {
+          document.getElementById("text1").innerHTML = 
+          "(1일) 10시조 : 7.83h / 13시조 : 7.83h / 풀타임 : 7.67h / 미들타임 : 7.17h / 파트타임 : 4.83h <br> (1주) 10시조 : 39.2h / 13시조 : 39.2h / 풀타임 : 38.3h / 미들타임 : 35.8h / 파트타임 : 24.2h <br><br> * 1주일에 여러 근무타입으로 근무했을 경우 개별로 계산해야 합니다.";
+        }
+      }
+    </script>
+  </body>
+</html>
